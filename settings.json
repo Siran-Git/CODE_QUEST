@@ -1,0 +1,20 @@
+{
+  // Auto-format on save using Prettier
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // Show rulers at 80 and 100 characters
+  "editor.rulers": [80, 100],
+
+  // Highlight the active line
+  "editor.renderLineHighlight": "all",
+
+  // Use 2-space indentation for web files
+  "[html]": { "editor.tabSize": 2 },
+  "[css]": { "editor.tabSize": 2 },
+  "[javascript]": { "editor.tabSize": 2 },
+
+  // Live Server settings — open index.html automatically
+  "liveServer.settings.donotShowInfoMsg": true,
+  "liveServer.settings.port": 5500
+}

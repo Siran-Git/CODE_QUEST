@@ -1,0 +1,944 @@
+/* ============================================================
+   CODE QUEST — style.css
+   All visual styles for the game
+   ============================================================ */
+
+/* ── CSS VARIABLES (theme tokens) ── */
+:root {
+  --bg: #fdf6e8;
+  --ink: #2c1a00;
+  --ink2: #4a3010;
+  --gold: #b8720a;
+  --gold-light: #e09020;
+  --gold-pale: #fdecc0;
+  --gold-border: #f0c060;
+  --ember: #c0392b;
+  --ember-pale: #fdecea;
+  --forest: #1a6640;
+  --forest-light: #228850;
+  --forest-pale: #e6f5ec;
+  --magic: #6030b8;
+  --magic-light: #7b48d0;
+  --magic-pale: #f0eaff;
+  --code-bg: #1e2736;
+  --code-surface: #263040;
+  --code-green: #4ec994;
+  --code-blue: #56b0f0;
+  --code-orange: #f0a840;
+  --code-pink: #f070a8;
+  --code-purple: #c090f8;
+  --shadow-sm: 0 2px 8px rgba(100, 60, 0, 0.1);
+  --shadow-md: 0 4px 20px rgba(100, 60, 0, 0.13);
+  --radius: 14px;
+}
+
+/* ── RESET ── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── BODY ── */
+body {
+  background: linear-gradient(160deg, #fef9ed 0%, #fdf0d0 50%, #fce8b8 100%);
+  min-height: 100vh;
+  font-family: "Lora", Georgia, serif;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+body.tamil-mode {
+  font-family: "Noto Sans Tamil", "Lora", sans-serif;
+}
+
+/* Coloured top stripe */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(
+    to right,
+    var(--magic-light),
+    var(--gold-light),
+    var(--forest-light),
+    var(--gold-light),
+    var(--magic-light)
+  );
+  z-index: 100;
+}
+
+/* Soft radial glow overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(
+      circle at 15% 25%,
+      rgba(224, 144, 32, 0.08) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 85% 65%,
+      rgba(96, 48, 184, 0.06) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 50% 5%,
+      rgba(34, 136, 80, 0.05) 0%,
+      transparent 35%
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── APP WRAPPER ── */
+#app {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 800px;
+  padding: 20px 18px 60px;
+}
+
+/* ============================================================
+   TOP BAR  (language + age selectors)
+   ============================================================ */
+.top-bar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 26px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+}
+
+.lang-btn,
+.age-btn {
+  font-size: 14px;
+  font-weight: 700;
+  padding: 9px 22px;
+  border-radius: 30px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.18s;
+  letter-spacing: 0.3px;
+  font-family: "Lora", Georgia, serif;
+}
+
+body.tamil-mode .lang-btn,
+body.tamil-mode .age-btn {
+  font-family: "Noto Sans Tamil", sans-serif;
+}
+
+/* Language buttons */
+.lang-btn {
+  background: white;
+  border-color: var(--gold-border);
+  color: var(--gold);
+  box-shadow: var(--shadow-sm);
+}
+
+.lang-btn.active {
+  background: var(--gold-light);
+  color: white;
+  border-color: var(--gold-light);
+  box-shadow: 0 3px 12px rgba(224, 144, 32, 0.4);
+}
+
+/* Age buttons */
+.age-btn {
+  background: white;
+  border-color: #d0c0e8;
+  color: var(--magic);
+  box-shadow: var(--shadow-sm);
+}
+
+.age-btn.active {
+  background: var(--magic-light);
+  color: white;
+  border-color: var(--magic-light);
+  box-shadow: 0 3px 12px rgba(123, 72, 208, 0.35);
+}
+
+/* Thin separator between lang and age groups */
+.bar-sep {
+  width: 1.5px;
+  background: var(--gold-border);
+  align-self: stretch;
+  margin: 5px 2px;
+  border-radius: 2px;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.025);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   TITLE SCREEN
+   ============================================================ */
+#screen-title {
+  min-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: fadeUp 0.8s ease;
+}
+
+.title-glyph {
+  font-size: 80px;
+  margin-bottom: 14px;
+  filter: drop-shadow(0 4px 16px rgba(224, 144, 32, 0.5));
+  animation: float 4s ease-in-out infinite;
+}
+
+h1.game-title {
+  font-family: "Cinzel Decorative", serif;
+  font-size: clamp(26px, 5.5vw, 48px);
+  color: var(--gold);
+  letter-spacing: 2px;
+  line-height: 1.2;
+  text-shadow: 0 2px 0 rgba(180, 100, 0, 0.12);
+}
+
+h2.game-subtitle {
+  font-family: "Cinzel Decorative", serif;
+  font-size: clamp(11px, 2vw, 16px);
+  color: var(--magic-light);
+  letter-spacing: 4px;
+  margin-top: 8px;
+}
+
+.title-divider {
+  width: 280px;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--gold-border),
+    transparent
+  );
+  margin: 24px auto;
+}
+
+.title-lore {
+  max-width: 540px;
+  font-size: 17.5px;
+  line-height: 1.9;
+  color: var(--ink2);
+  font-style: italic;
+  margin-bottom: 28px;
+}
+
+.title-lore strong {
+  color: var(--gold);
+  font-style: normal;
+}
+
+/* Primary CTA button (used on title + victory screens) */
+.btn-primary {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: white;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  border: none;
+  padding: 16px 44px;
+  cursor: pointer;
+  border-radius: 40px;
+  box-shadow:
+    0 4px 20px rgba(180, 100, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: all 0.2s;
+  margin-top: 4px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(180, 100, 0, 0.38);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Chapter preview badges */
+.chapter-badges {
+  display: flex;
+  gap: 10px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.badge {
+  background: white;
+  border: 1.5px solid var(--gold-border);
+  border-radius: 30px;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: var(--ink2);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ============================================================
+   HUD  (top bar during gameplay)
+   ============================================================ */
+.hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: white;
+  border: 1.5px solid var(--gold-border);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.hud-chapter {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+
+.hud-xp {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  color: var(--forest-light);
+  font-weight: 700;
+}
+
+.hud-progress {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.progress-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e8dcc8;
+  border: 2px solid #d0c0a0;
+  transition: all 0.3s;
+}
+
+.progress-dot.done {
+  background: var(--forest-light);
+  border-color: var(--forest);
+}
+.progress-dot.wrong-dot {
+  background: var(--ember);
+  border-color: #900;
+}
+
+/* ============================================================
+   STORY PANEL
+   ============================================================ */
+.story-panel {
+  background: white;
+  border: 1.5px solid var(--gold-border);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+  animation: popIn 0.4s ease;
+}
+
+/* Gold accent stripe at top */
+.story-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--gold-border),
+    var(--gold-light),
+    var(--gold-border)
+  );
+}
+
+.scene-icon {
+  font-size: 44px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.scene-title {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 13px;
+}
+
+.story-text {
+  font-size: 17px;
+  line-height: 1.9;
+  color: var(--ink2);
+  font-style: italic;
+}
+.story-text strong {
+  color: var(--ink);
+  font-style: normal;
+  font-weight: 700;
+}
+.story-text em {
+  color: var(--magic);
+}
+.story-text code {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 14px;
+  background: var(--magic-pale);
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: var(--magic);
+  font-style: normal;
+}
+
+/* ============================================================
+   CODEX  (concept / code panel)
+   ============================================================ */
+.concept-scroll {
+  background: var(--code-bg);
+  border: 1.5px solid rgba(78, 201, 148, 0.3);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 20px rgba(20, 30, 45, 0.18);
+}
+
+.codex-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--code-green);
+  letter-spacing: 3px;
+  margin-bottom: 13px;
+  opacity: 0.7;
+}
+
+.concept-title {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 13px;
+  color: var(--code-orange);
+  margin-bottom: 10px;
+}
+
+.concept-explanation {
+  font-size: 15.5px;
+  color: #c8d8e8;
+  line-height: 1.8;
+  margin-bottom: 18px;
+}
+
+body.tamil-mode .concept-explanation {
+  font-family: "Noto Sans Tamil", sans-serif;
+  font-size: 15px;
+}
+
+.code-block {
+  background: var(--code-surface);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 16px 20px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13.5px;
+  line-height: 1.9;
+  overflow-x: auto;
+}
+
+/* Syntax highlight classes */
+.kw {
+  color: var(--code-purple);
+}
+.str {
+  color: var(--code-orange);
+}
+.num {
+  color: var(--code-blue);
+}
+.var {
+  color: var(--code-green);
+}
+.cmt {
+  color: #5a7888;
+  font-style: italic;
+}
+.fn {
+  color: var(--code-pink);
+}
+
+/* ============================================================
+   CHALLENGE PANEL
+   ============================================================ */
+.challenge-panel {
+  background: white;
+  border: 1.5px solid #b8e8c8;
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Green accent stripe at top */
+.challenge-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, #c8f0d8, var(--forest-light), #c8f0d8);
+}
+
+.challenge-label {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 11px;
+  color: var(--forest-light);
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+
+.challenge-question {
+  font-size: 16.5px;
+  color: var(--ink2);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.challenge-question code {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13.5px;
+  background: var(--magic-pale);
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: var(--magic);
+}
+
+body.tamil-mode .challenge-question {
+  font-family: "Noto Sans Tamil", sans-serif;
+  font-size: 16px;
+}
+
+/* ── HINT ── */
+.hint-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.btn-hint {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--magic-light);
+  background: var(--magic-pale);
+  border: 1.5px solid #c8a8f0;
+  padding: 7px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.btn-hint:hover:not(:disabled) {
+  background: #e2d4ff;
+  border-color: var(--magic-light);
+}
+.btn-hint:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.hint-bubble {
+  background: var(--magic-pale);
+  border: 1.5px solid #c8a8f0;
+  border-radius: 10px;
+  padding: 13px 18px;
+  font-size: 15px;
+  color: var(--magic);
+  line-height: 1.7;
+  margin-bottom: 14px;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.hint-bubble.shown {
+  display: block;
+}
+
+body.tamil-mode .hint-bubble {
+  font-family: "Noto Sans Tamil", sans-serif;
+}
+
+/* ── ANSWER CHOICES ── */
+.choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.choice-btn {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  background: #f8f4ee;
+  border: 1.5px solid #ddd0b8;
+  color: var(--ink2);
+  padding: 13px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s;
+  line-height: 1.55;
+}
+
+.choice-btn:hover:not(:disabled) {
+  background: var(--forest-pale);
+  border-color: var(--forest-light);
+  color: var(--forest);
+  transform: translateX(3px);
+}
+
+.choice-btn.correct {
+  background: var(--forest-pale);
+  border-color: var(--forest-light);
+  color: var(--forest);
+  animation: pulse 0.35s ease;
+}
+
+.choice-btn.wrong {
+  background: var(--ember-pale);
+  border-color: var(--ember);
+  color: var(--ember);
+  animation: shake 0.4s ease;
+}
+
+/* ── FEEDBACK BOX ── */
+.feedback-box {
+  border-radius: 10px;
+  padding: 14px 20px;
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.7;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.feedback-box.correct {
+  background: var(--forest-pale);
+  border: 1.5px solid #88ccaa;
+  color: var(--forest);
+  display: block;
+}
+
+.feedback-box.wrong {
+  background: var(--ember-pale);
+  border: 1.5px solid #f0a898;
+  color: #7a1818;
+  display: block;
+}
+
+body.tamil-mode .feedback-box {
+  font-family: "Noto Sans Tamil", sans-serif;
+}
+
+/* ── CONTINUE BUTTON ── */
+.btn-continue {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: white;
+  background: linear-gradient(135deg, var(--forest-light), var(--forest));
+  border: none;
+  padding: 14px 32px;
+  cursor: pointer;
+  border-radius: 30px;
+  margin-top: 16px;
+  display: none;
+  transition: all 0.2s;
+  width: 100%;
+  box-shadow: 0 3px 14px rgba(26, 102, 64, 0.25);
+}
+
+.btn-continue:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(26, 102, 64, 0.32);
+}
+
+/* ============================================================
+   VICTORY SCREEN
+   ============================================================ */
+#screen-victory {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: 90vh;
+  justify-content: center;
+  padding: 40px 20px;
+  animation: fadeUp 0.8s ease;
+}
+
+.victory-glyph {
+  font-size: 84px;
+  animation: float 3s ease-in-out infinite;
+  margin-bottom: 18px;
+}
+
+.victory-title {
+  font-family: "Cinzel Decorative", serif;
+  font-size: clamp(18px, 4vw, 30px);
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.victory-sub {
+  font-size: 17px;
+  color: var(--ink2);
+  max-width: 430px;
+  line-height: 1.85;
+  font-style: italic;
+  margin-top: 6px;
+}
+
+.victory-xp {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 22px;
+  color: var(--forest-light);
+  font-weight: 700;
+  margin: 16px 0;
+}
+
+.victory-concepts {
+  background: white;
+  border: 1.5px solid var(--gold-border);
+  border-radius: var(--radius);
+  padding: 24px 32px;
+  margin: 18px 0;
+  max-width: 500px;
+  text-align: left;
+  box-shadow: var(--shadow-md);
+  width: 100%;
+}
+
+.victory-concepts h3 {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  margin-bottom: 14px;
+}
+
+.learned-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 15.5px;
+  color: var(--ink2);
+  padding: 8px 0;
+  border-bottom: 1px solid #f0e8d8;
+  line-height: 1.55;
+}
+
+.learned-item:last-child {
+  border-bottom: none;
+}
+
+.learned-item .check {
+  color: var(--forest-light);
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+body.tamil-mode .learned-item,
+body.tamil-mode .victory-sub {
+  font-family: "Noto Sans Tamil", sans-serif;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 520px) {
+  .choice-grid {
+    grid-template-columns: 1fr;
+  }
+  .story-panel,
+  .challenge-panel {
+    padding: 20px 16px;
+  }
+  .top-bar {
+    gap: 7px;
+  }
+  .lang-btn,
+  .age-btn {
+    font-size: 13px;
+    padding: 8px 14px;
+  }
+}
+
+/* ============================================================
+   PLAYER NAME INPUT (Title Screen)
+   ============================================================ */
+.name-input-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.name-label {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+body.tamil-mode .name-label {
+  font-family: "Noto Sans Tamil", sans-serif;
+  font-size: 13px;
+  letter-spacing: 0px;
+}
+
+.name-input {
+  width: 100%;
+  padding: 13px 20px;
+  font-family: "Lora", Georgia, serif;
+  font-size: 16px;
+  color: var(--ink);
+  background: white;
+  border: 2px solid var(--gold-border);
+  border-radius: 30px;
+  outline: none;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+
+.name-input:focus {
+  border-color: var(--gold-light);
+  box-shadow: 0 0 0 3px rgba(224, 144, 32, 0.15);
+}
+
+.name-input::placeholder {
+  color: #c0a880;
+  font-style: italic;
+}
+
+body.tamil-mode .name-input {
+  font-family: "Noto Sans Tamil", sans-serif;
+}
+
+/* ============================================================
+   HUD PLAYER NAME
+   ============================================================ */
+.hud-player-name {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 10px;
+  color: var(--magic-light);
+  letter-spacing: 1px;
+}
+
+/* ============================================================
+   BACK BUTTON (in HUD)
+   ============================================================ */
+.btn-back {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--ember);
+  background: var(--ember-pale);
+  border: 1.5px solid var(--ember);
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.btn-back:hover {
+  background: var(--ember);
+  color: white;
+  transform: translateX(-2px);
+}

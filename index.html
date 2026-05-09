@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Quest — The Lost Variables</title>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Lora:ital,wght@0,500;0,700;1,500&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+Tamil:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Game styles -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- ═══════════════════════════════════════
+       TOP BAR — Language + Age selectors
+       ═══════════════════════════════════════ -->
+      <div class="top-bar" id="top-bar">
+        <button
+          class="lang-btn active"
+          id="btn-lang-en"
+          onclick="setLang('en')"
+        >
+          🇬🇧 English
+        </button>
+        <button class="lang-btn" id="btn-lang-ta" onclick="setLang('ta')">
+          🇮🇳 தமிழ்
+        </button>
+        <div class="bar-sep"></div>
+        <button class="age-btn active" id="age-young" onclick="setAge('young')">
+          <span id="young-label">🧒 Young Explorer</span>
+        </button>
+        <button class="age-btn" id="age-older" onclick="setAge('older')">
+          <span id="older-label">🧙 Seasoned Mage</span>
+        </button>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+       TITLE SCREEN
+       ═══════════════════════════════════════ -->
+      <div id="screen-title">
+        <div class="title-glyph">🔮</div>
+        <h1 class="game-title">Code Quest</h1>
+        <h2 class="game-subtitle" id="title-subtitle">The Lost Variables</h2>
+        <div class="title-divider"></div>
+        <p class="title-lore" id="title-lore"></p>
+
+        <!-- ── PLAYER NAME INPUT ── -->
+        <div class="name-input-box">
+          <label class="name-label" id="name-label"
+            >⚔️ Your Name, Apprentice:</label
+          >
+          <input
+            type="text"
+            id="player-name-input"
+            class="name-input"
+            placeholder="Enter your name..."
+            maxlength="20"
+            autocomplete="off"
+          />
+        </div>
+
+        <button class="btn-primary" id="btn-start" onclick="startGame()">
+          &#x2694;&#xFE0F; Begin Your Quest
+        </button>
+        <div class="chapter-badges">
+          <div class="badge" id="badge1">📖 Chapter 1: Variables</div>
+          <div class="badge" id="badge2">🔁 Chapter 2: Loops (soon)</div>
+          <div class="badge" id="badge3">🌿 Chapter 3: Conditions (soon)</div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+       GAME SCREEN
+       ═══════════════════════════════════════ -->
+      <div id="screen-game" style="display: none; flex-direction: column">
+        <!-- HUD -->
+        <div class="hud">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <button class="btn-back" onclick="goBack()">← Exit</button>
+            <div
+              class="hud-player-name"
+              id="hud-player-name"
+              style="display: none"
+            ></div>
+          </div>
+          <div class="hud-chapter" id="hud-chapter"></div>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: flex-end;
+              gap: 4px;
+            "
+          >
+            <div class="hud-xp" id="xp-counter">✨ 0 XP</div>
+            <div class="hud-progress" id="progress-dots"></div>
+          </div>
+        </div>
+
+        <!-- Story / scene panel -->
+        <div class="story-panel" id="story-panel">
+          <span class="scene-icon" id="scene-icon">🏰</span>
+          <div class="scene-title" id="scene-title"></div>
+          <div class="story-text" id="story-text"></div>
+        </div>
+
+        <!-- Codex — concept explanation + code example -->
+        <div class="concept-scroll" id="concept-scroll" style="display: none">
+          <div class="codex-label" id="codex-label">📜 THE WIZARD'S CODEX</div>
+          <div class="concept-title" id="concept-title"></div>
+          <div class="concept-explanation" id="concept-explanation"></div>
+          <div class="code-block" id="code-block"></div>
+        </div>
+
+        <!-- Challenge panel -->
+        <div class="challenge-panel" id="challenge-panel" style="display: none">
+          <div class="challenge-label" id="challenge-label"></div>
+          <div class="challenge-question" id="challenge-question"></div>
+
+          <!-- Hint -->
+          <div class="hint-row" id="hint-row" style="display: none">
+            <button class="btn-hint" id="btn-hint" onclick="showHint()">
+              🔮 <span id="hint-btn-text">Show Hint</span>
+            </button>
+          </div>
+          <div class="hint-bubble" id="hint-bubble"></div>
+
+          <!-- Answer choices -->
+          <div class="choice-grid" id="choice-grid"></div>
+
+          <!-- Result feedback + continue button -->
+          <div class="feedback-box" id="feedback-box"></div>
+          <button class="btn-continue" id="btn-continue" onclick="nextStep()">
+            Continue →
+          </button>
+        </div>
+      </div>
+      <!-- /screen-game -->
+
+      <!-- ═══════════════════════════════════════
+       VICTORY SCREEN
+       ═══════════════════════════════════════ -->
+      <div
+        id="screen-victory"
+        style="
+          display: none;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          min-height: 90vh;
+          justify-content: center;
+          padding: 40px 20px;
+        "
+      >
+        <div class="victory-glyph">🏆</div>
+        <h1 class="victory-title" id="victory-title"></h1>
+        <p class="victory-sub" id="victory-sub"></p>
+        <div class="victory-xp" id="final-xp">✨ 0 XP</div>
+        <div class="victory-concepts" id="victory-concepts"></div>
+        <button class="btn-primary" id="btn-replay" onclick="restartGame()">
+          🔄 Play Again
+        </button>
+      </div>
+    </div>
+    <!-- /app -->
+
+    <!-- ═══════════════════════════════════════
+     SCRIPTS  ← order matters!
+     1. translations.js  — T object
+     2. steps.js         — STEPS object
+     3. sounds.js        — SFX object
+     4. main.js          — game engine (uses all above)
+     ═══════════════════════════════════════ -->
+    <script src="js/translations.js"></script>
+    <script src="js/steps.js"></script>
+    <script src="js/sounds.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
